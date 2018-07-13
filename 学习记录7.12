@@ -1,24 +1,4 @@
 
-- **File类**
-    - 类的说明：File类是用来查看文件或者创建文件的
-    - 常用的方法以及静态字符串：
-        - File.separator -->在windows系统是\,在linux系统是/
-        - File f = new File(directory, file);
-        
-                    		if(f.exists()) {
-        			System.out.println("文件路径:" + f.getAbsolutePath());
-        			System.out.println("文件大小:" + f.length());
-                    }else {
-        			f.getParentFile().mkdirs(); //这里必须调用mkdirs的方法,因为文件多个目录
-        			try {   //属于IOException,须抛出异常
-        				f.createNewFile();
-        			} catch (IOException e) {
-        				e.printStackTrace();
-        			}
-        		}
-        - f.getName();  //取得路径下的文件名或者目录名;
-        - f.isDirectory();  //判断f是否为路径名,既下一层是否还有文件;
-        - f.listFile(); //返回一个File类型的数组,既f中下一层中所包含的全部文件存储在数组中;
         
 - **Enum类**
 	- Function:用来规定m变量的值只能为枚举的那几个值,这就有利于在编译时期就发现m是否为规定的那几个值,提前发现错误
