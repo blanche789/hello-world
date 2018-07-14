@@ -1,0 +1,185 @@
+- **Iterator接口**
+	- 作用：对于Collection接口下的许多容器类，都不能都迭代遍历，只能够打印全部，Iterator接口解决了这个问题，可以遍历容器内的对象。
+	- 作用原理：通过容器类的对象调用iterator方法，返回一个实现了Iterator接口的对象，从而可以调用重写了的Iterator的方法.实际上，这里有应用了多态：①返回的对象实现了Iterator接口、②返回的对象重写了Iterator中的方法、3父类引用指向子类对象
+	- Iterator中的方法：
+		- boolean hadnext();  //游标右边仍有元素，则返回true
+		- E next();			//返回游标右边的Object，同时将游标下移一格
+		- void remove();  //移除迭代器返回的对象，调用一次next，返回一个对象，才能remove一个对象
+	***	
+	- 代码实现
+	
+			package com.blanche.Iterator;
+			import java.util.Collection;
+			import java.util.HashSet;
+			import java.util.Iterator;
+
+
+
+
+			public class Test1 {
+				public static void main(String[] args) {
+					Name n1 = new Name("Wu","PeiJie");
+					Collection m = new HashSet();
+					m.add(n1);
+					m.add(new Name("Ye","SiTing"));
+					Iterator i1 = m.iterator(); //父类引用指向子类对象
+					for(;i1.hasNext();) {  
+						System.out.println(i1.next());
+					}
+					System.out.println(m);
+					for(;i1.hashNext;){
+					Name name = (Name)i1.next();
+					if(name.getFirstName().length()<3){
+					i1.remove();	//不可调用m.remove,因为已经被Ieterator对象锁定了整个容器
+			}
+			}
+				}
+			}
+		    class Name{
+				
+			private String firstName;
+			private String lastName;
+			public Name(String firstName,String lastName) {
+				this.firstName = firstName;
+				this.lastName = lastName;
+			}
+			
+			public  String getFirstName() {
+				return firstName;
+			}
+			public String getLastName() {
+				return lastName;
+			}
+			public boolean equals(Object obj) {
+				if(obj instanceof Name) {
+				Name name = (Name) obj;
+				return (firstName.equals(name.firstName)) && (lastName.equals(name.lastName));	
+				}
+				
+				return super.equals(obj);
+			}
+			
+			public int hashCode() {
+				return super.hashCode();
+			}
+			public String toString() { //重写了toString方法
+				
+					
+			String str1= this.getFirstName();
+			String str2 =this.getLastName();
+			return str1 + str2;
+	
+			}
+			}		    
+- **set接口**
+	- 功能:装不同的对象的容器,且对象无序
+	- 继承的类:HashSet
+	- 常用方法:add();、retain（）；、addAll（）；
+	- 代码实现:
+	 
+			package com.blanche.Set;
+			
+			import java.util.Collection;
+			import java.util.HashSet;
+			import java.util.Set;
+			
+			import com.blanche.collection.Name;
+			
+			public class Test1 {
+				public static void main(String[] args) {
+					Set s1 = new HashSet();
+					Set s2 = new HashSet();
+					s1.add(new Name("a","d"));
+					s1.add(new Name("c","d"));
+					s2.add(new Name("a","d"));
+					s2.add(new Name("c","d"));
+			
+					s1.add("a");
+					s1.add("b");
+					s2.add("a");
+					s2.add("d");
+					Set sn = new HashSet(s1); 
+					sn.retainAll(s2);  //求交集
+					System.out.println(sn);
+					Set sm = new HashSet(s2);
+					sm.addAll(s1);  //求并集
+					System.out.println(sm);
+				}
+			}
+		- hashCode和equals方法重写的快捷键
+			- alt + shift + s + h
+			- 作用：两个方法的重写保证了set中元素的唯一性
+
+- **List接口**
+	- 作用：可以存放相同的对象
+	- 继承的类：ArrayList（以数组形式存放对象），LinkedList（以链表形式存放对象）
+	- 可以利用Collections类里的算法来对list中的元素进行排序
+	- 代码实现：
+	- 
+		package com.blanche.List;
+		
+		import java.util.ArrayList;
+		import java.util.Collections;
+		import java.util.List;
+		
+		public class Test1 {
+			public static void main(String[] args) {
+				List l1 = new ArrayList<>();
+				l1.add("a0");
+				for(int i=1;i<7;i++) {
+					l1.add("a" + i);
+			}   
+				System.out.println(l1);
+				Collections.reverse(l1); //逆序
+				System.out.println(l1);
+				Collections.shuffle(l1);  //乱序
+				System.out.println(l1);
+				Collections.sort(l1);  	//顺序
+				System.out.println(l1);
+				int index = Collections.binarySearch(l1,"a5");  //二分法寻找索引
+				System.out.println(index);
+			}
+		}
+- **Comparable接口**
+	- 作用：通过对接口的继承，重写compareTo方法，这样就可以比较对象，若对象相同就返回1，对象A小于对象B，则返回-1；反之，则返回1；多数情况下是调用String类里重写的compareTo方法
+	- 代码实现：
+	
+				@Override
+			   public int compareTo(Object obj) {
+			   	Name name = (Name)obj;
+			   	int firstComp = this.firstName.compareTo(name.firstName);
+		        return (firstComp != 0 ? firstComp : this.lastName.compareTo(name.lastName));
+		    }
+- **Map接口**
+	- 作用：成对存储对象，分为key - value，
+	- 继承的类：HashMap；TreeMap
+	- 代码实现
+		
+			package com.blanche.Map;
+	
+			import java.util.Collection;
+			import java.util.HashMap;
+			import java.util.Map;
+			import java.util.TreeMap;
+			
+			public class Test1 {
+				public static void main(String[] args) {
+					Map m1 = new HashMap();
+					Map m2 = new TreeMap();
+					//m1.put("one",new Integer(1)); //可以自动装箱，1 = new Integer（1）；
+					m1.put("one",1 );   //put（）方法会返回一个value,返回的是先前被顶替掉的value
+					m1.put(2, "two");
+					m2.put("A", "one");
+					m2.put("B", "two");
+				System.out.println(m1);
+				System.out.println(m2);
+					System.out.println(m1.size());
+					System.out.println(m2.size());  //长度是以对为基本单位
+					Collection c1 = m1.values();
+					System.out.println(c1);
+					System.out.println(m1.containsKey("1"));  //返回bool值，底层是通过hashCode方法判断的，因为通过equals遍历对象的话效率太低
+					System.out.println(m1.containsValue("2"));
+					//int i = (Integer)m1.get("one").intValue();
+					int i = (Integer)m1.get("one");		//自动拆箱,要强制转换,因为不清楚map返回的value是什么类型,自动拆箱既省略intValue方法
+				}
+			}
